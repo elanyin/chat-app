@@ -13,8 +13,19 @@ const LoginPage = () => {
 
   const {login} = useContext(AuthContext)
 
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
+
+    if (!agreedToTerms) {
+      setErrorMessage("Please agree to the terms and privacy policy.");
+      return;
+    }
+
+    setErrorMessage("");
 
     if(currState === 'Sign up' && !isDataSubmitted) {
       setIsDataSubmitted(true)
@@ -66,9 +77,13 @@ const LoginPage = () => {
         </button>
 
         <div className='flex items-center gap-2 text-sm text-gray-500'>
-          <input type="checkbox" />
+          <input type="checkbox" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)}/>
           <p>Agree to the terms of use & privacy policy.</p>
         </div>
+
+        {errorMessage && (
+          <p className="text-red-500 text-sm">{errorMessage}</p>
+        )}
 
         <div className='flex flex-col gap-2'>
           { currState === 'Sign up' ? (
